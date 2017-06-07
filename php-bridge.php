@@ -144,6 +144,14 @@ foreach($arguments as &$argument) {
 }
 unset($argument);
 
+// Add quotes for PHPUnit argument
+for($i = 0; $i < count($arguments); $i++) {
+    if($arguments[$i] == '--filter' && isset($arguments[$i+1])) {
+        $arguments[$i+1] = "'" . $arguments[$i+1] . "'";
+        break;
+    }
+}
+
 dbg('Linux arguments: ' . implode(' ', $arguments));
 
 // -dxdebug.remote_log=/mnt/c/Code/UbuntuPhpWindows/xdebugLog.txt
