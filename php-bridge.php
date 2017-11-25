@@ -80,6 +80,28 @@ function fgetSize0($stream) {
     return $payload;
 }
 
+function fromUnix($payload)
+{
+	$search = 'file:///mnt/';
+	$pos = strpos($payload, $search);
+	if($pos !== false) {
+		$diskName = strtolower(substr($payload, $pos + strlen($search), 1));
+		return strtr($payload, ["file:///mnt/{$diskName}/" => "file:///{$diskName}:/"]);
+	}
+	return $payload;
+}
+
+function fromWindows($payload)
+{
+	$pos = strpos($payload, ':/');
+	$pos = strpos($payload, ':/', $pos + 2);
+	if($pos !== false) {
+		$diskName = strtolower(substr($payload, $pos - 1, 1));
+		return strtr($payload, ["file:///{$diskName}:/" => "file:///mnt/{$diskName}/"]);
+	}
+	return $payload;
+}
+
 $windir = getenv('WINDIR');
 $knownBashPaths = [
     'System32\\bash.exe',
@@ -155,9 +177,6 @@ for($i = 0; $i < count($arguments); $i++) {
 dbg('Linux arguments: ' . implode(' ', $arguments));
 
 // -dxdebug.remote_log=/mnt/c/Code/UbuntuPhpWindows/xdebugLog.txt
-if(getenv('PHP_IDE_CONFIG')) {
-	$envValues = ' PHP_IDE_CONFIG=' . getenv('PHP_IDE_CONFIG');
-}
 $linuxCmd = ($envValues ? $envValues . ' ' : '') . 'php ' . implode(' ', $arguments);
 dbg('Linux command: ' . $linuxCmd);
 
@@ -231,7 +250,7 @@ while ($exitCode === null) {
         $payload = fgetSize0($connection['php']);
         if ($payload !== null) {
             dbg('Xdebug PHP -> IDE [orig] : ' . $payload);
-            $payload = strtr($payload, ['file:///mnt/c/' => 'file:///C:/']);
+			$payload = fromUnix($payload);
             dbg('Xdebug PHP -> IDE [fixed]: ' . $payload);
             if (!@fwrite($connection['ide'], strlen($payload) . "\0" . $payload . "\0")) {
                 $closeConnection = true;
@@ -242,7 +261,7 @@ while ($exitCode === null) {
             $payload = fget0($connection['ide']);
             if ($payload !== null) {
                 dbg('Xdebug IDE -> PHP [orig] : ' . $payload);
-                $payload = strtr($payload, ['file://C:/' => 'file:///mnt/c/']);
+				$payload = fromWindows($payload);
                 dbg('Xdebug IDE -> PHP [fixed]: ' . $payload);
                 if (!@fwrite($connection['php'], $payload . "\0")) {
                    $closeConnection = true;

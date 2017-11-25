@@ -38,10 +38,6 @@ You should see that IDE reads configuration properly. XDebug, when installed, sh
 
 ![PhpStorm settings with path to php.cmd set](doc/phpstorm-settings.png)
 
-2. Add PHP_IDE_CONFIG="serverName=?" environment variable to run configuration
-
-![PhpStorm run configuration](doc/phpstorm-run.png)
-
 ## How it works?
 
 User starts `php.cmd` batch.
