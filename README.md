@@ -34,11 +34,13 @@ Working directory is preserved. File paths in command arguments are mapped into 
 
 1. Create new PHP configuration and set your `php.cmd` as PHP executable.
 
-2. That's it!
-
 You should see that IDE reads configuration properly. XDebug, when installed, should work right now.
 
 ![PhpStorm settings with path to php.cmd set](doc/phpstorm-settings.png)
+
+2. Add PHP_IDE_CONFIG="serverName=?" environment variable to run configuration
+
+![PhpStorm run configuration](doc/phpstorm-run.png)
 
 ## How it works?
 

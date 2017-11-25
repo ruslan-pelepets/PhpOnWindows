@@ -155,6 +155,9 @@ for($i = 0; $i < count($arguments); $i++) {
 dbg('Linux arguments: ' . implode(' ', $arguments));
 
 // -dxdebug.remote_log=/mnt/c/Code/UbuntuPhpWindows/xdebugLog.txt
+if(getenv('PHP_IDE_CONFIG')) {
+	$envValues = ' PHP_IDE_CONFIG=' . getenv('PHP_IDE_CONFIG');
+}
 $linuxCmd = ($envValues ? $envValues . ' ' : '') . 'php ' . implode(' ', $arguments);
 dbg('Linux command: ' . $linuxCmd);
 
