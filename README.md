@@ -67,6 +67,7 @@ In case of problems just drop me a message, file an issue or create a pull reque
 ## Contact
 
 Michal Kočárek <michal.kocarek@brainbox.cz> – <https://twitter.com/michalkocarek>
+Ruslan Pelepets <ruslan.pelepets@mail.ru>
 
 ## License
 
